@@ -1,0 +1,41 @@
+---
+github: {}
+
+gem:
+  autospec: true
+
+dnote:
+  service  : DNote
+  labels   : ~
+  output   : log/dnote.rdoc
+
+yard:
+  yardopts: true
+  priority: -1
+
+qedoc:
+  files : qed/
+  output: doc/QED.rdoc
+  title : AE Demonstrandum
+
+email:
+  service : Email
+  file    : ~
+  subject : ~
+  mailto  : 
+    - ruby-talk@ruby-lang.org
+    - rubyworks-mailinglist@googlegroups.com
+  #from    : transfire@gmail.com
+  #server  : <%= ENV['EMAIL_SERVER'] %>
+  #port    : <%= ENV['EMAIL_PORT'] %>
+  #account : <%= ENV['EMAIL_ACCOUNT'] %>
+  #domain  : <%= ENV['EMAIL_DOMAIN'] %>
+  #login   : <%= ENV['EMAIL_LOGIN'] %>
+  #secure  : <%= ENV['EMAIL_SECURE'] %>
+
+vclog:
+  service  : VClog
+  output   : log/history.rdoc
+  type     : history
+  active   : false
+
