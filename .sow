@@ -1,0 +1,7 @@
+
+minitest  : false
+cucumber  : false
+qed       : true
+ruby-test : true
+lemon     : false
+
