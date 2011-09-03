@@ -1,0 +1,2 @@
+#!mast .ruby .yardopts bin info data lib man spec test [A-Z]*.*
+

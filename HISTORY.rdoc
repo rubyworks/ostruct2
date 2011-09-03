@@ -1,0 +1,8 @@
+= RELEASE HISTORY
+
+0.1.0 | 2011-01-01
+
+Summary of release...
+
+* First release.
+

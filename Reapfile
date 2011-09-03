@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+
+# @todo move to reap proper
+#require 'facets/string/file'
+require 'facets/kernel/ask'  # TODO: make sure reap provides this
+
+#
+# TODO: Do things in ruby instead of shelling out!
+#
+
+ignore 'pkg', 'site'
+
+trip 'manifest' do
+  system 'mast -u'
+end
+
+trip 'release' do
+  exit -1 unless system('detroit release')
+  system 'pom news | git tag -a -F - #{version}'
+end
+
+file 'VERSION' do
+  # `dotruby -r meta -r VERSION`
+  system 'pom spec -u'
+end
+
+file 'PROFILE' do
+  # TODO: Ultimately `dotruby` should be able to do this.
+  # `dotruby -r meta -r VERSION`
+  system 'pom spec -u'
+end
+
+file 'lib/**/*' do
+  exit -1 unless system('detroit test')
+end
+
+state :create_project do
+  ! File.exist?('.ruby')
+  # gem install dotruby
+end
+
+rule :create_project do
+  system '$EDITOR ruby.yaml'
+  #break unless ask('creating new project?')
+  #meta = YAML.load_file('ruby.yaml')
+  #name = ARGV[1] || File.basename(Dir.pwd)
+  #meta['name'] = name
+  #meta.each do |k,v|
+  #  case v2 = ask("#{k} (#{v}):")
+  #  when nil, ''
+  #  when '`' then exit
+  #  when '!' then exit -1
+  #  else
+  #    meta[k] = YAML.load(v2)
+  #  end
+  #end
+end
+
+
+#require 'facets/functor'
+#class String
+#  def file
+#    str = self
+#    Functor.new do |op,*a,&b|
+#      FileUtils.send(op,str,*a,&b)
+#    end
+#  end
+#end
