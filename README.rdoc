@@ -1,23 +1,18 @@
-= New
+= OpenStruct 2
+
 
 == DESCRIPTION
 
-"New" is a empty Ruby project scaffold. To use it simply clone the repo
-and run `reap`. Obviously that means you need to install `reap` first.
-
-    $ gem install reap
-
-So this is how it goes:
-
-    $ git clone git://github.com/rubyworks/new.git project-name
-    $ cd project-name
-    $ reap
-
-New is pretty opinionated, but over time it will become increasingly flexible.
+OStruct2 is a reimplementation of Ruby's standard ostruct.rb library.
+This new OpenStruct class addresses issues the original has with conflicting
+member names and cloning.
 
 
 == COPYRIGHTS
 
-Copyright (c) 2011 Thomas Sawyer
+Copyright (c) 2010 Rubyworks
 
+OStruct2 is distributed under the *BSD-2-Clause* license.
+
+See LICENSE.txt for detatils.
 
