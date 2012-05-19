@@ -1,14 +1,20 @@
 = OpenStruct 2
 
+{Website}[http://rubyworks.github.com/ostruct2] /
+{Report Issue}[http://github.com/rubyworks/ostruct2/issues] /
+{Source Code}[http://github.com/rubyworks/ostruct2]
 
-== DESCRIPTION
+{<img src="https://secure.travis-ci.org/rubyworks/ostruct2.png" />}[http://travis-ci.org/rubyworks/ostruct2]
+
+
+== Description
 
 OStruct2 is a reimplementation of Ruby's standard ostruct.rb library.
 This new OpenStruct class addresses issues the original has with conflicting
 member names and cloning.
 
 
-== COPYRIGHTS
+== Copyrights
 
 Copyright (c) 2010 Rubyworks
 
