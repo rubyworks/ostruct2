@@ -1,0 +1,3 @@
+OStruct2 is a reimplementation of Ruby's standard ostruct.rb library.
+This new OpenStruct class addresses issues the original has with conflicting
+member names and cloning.

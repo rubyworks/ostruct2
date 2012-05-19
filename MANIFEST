@@ -1,2 +1,6 @@
 #!mast .ruby .yardopts bin info data lib man spec test [A-Z]*.*
-
+lib/ostruct2.rb
+lib/ostructable.rb
+test/helper.rb
+HISTORY.rdoc
+README.rdoc

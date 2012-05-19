@@ -1,22 +1,24 @@
 ---
-github: {}
+github:
+  gh_pages: web
 
 gem:
-  autospec: true
+  active: true
 
 dnote:
   service  : DNote
   labels   : ~
-  output   : log/dnote.rdoc
+  output:
+    log/dnote.html
 
 yard:
   yardopts: true
   priority: -1
 
 qedoc:
-  files : qed/
-  output: doc/QED.rdoc
-  title : AE Demonstrandum
+  files : demo/
+  output: DEMO.rdoc
+  title : Ostruct2
 
 email:
   service : Email
@@ -25,17 +27,11 @@ email:
   mailto  : 
     - ruby-talk@ruby-lang.org
     - rubyworks-mailinglist@googlegroups.com
-  #from    : transfire@gmail.com
-  #server  : <%= ENV['EMAIL_SERVER'] %>
-  #port    : <%= ENV['EMAIL_PORT'] %>
-  #account : <%= ENV['EMAIL_ACCOUNT'] %>
-  #domain  : <%= ENV['EMAIL_DOMAIN'] %>
-  #login   : <%= ENV['EMAIL_LOGIN'] %>
-  #secure  : <%= ENV['EMAIL_SECURE'] %>
 
-vclog:
-  service  : VClog
-  output   : log/history.rdoc
-  type     : history
-  active   : false
+#vclog:
+#  active: false
+#  output:
+#    - log/history.html
+#    - log/changes.html
+
 

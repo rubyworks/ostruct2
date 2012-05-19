@@ -1,6 +1,7 @@
-.reap/digest
+.fire/digest
 .yardoc
 doc
-pkg
+log
 tmp
 site
+web
