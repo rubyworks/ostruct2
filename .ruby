@@ -33,6 +33,7 @@ resources:
   label: Website
   type: home
 - uri: http://rubydoc.info/gems/ostruct2/frames
+  label: Documentation
   type: docs
 - uri: http://github.com/rubyworks/ostruct2
   label: Source Code
@@ -59,4 +60,4 @@ description: ! 'OStruct2 is a reimplementation of Ruby''s standard ostruct.rb li
 
   member names and cloning.'
 organization: Rubyworks
-date: '2012-05-19'
+date: '2012-05-20'
