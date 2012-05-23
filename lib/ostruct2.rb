@@ -42,24 +42,31 @@ class OpenStruct2 < BasicObject
     #   o = OpenStruct2.renew
     #   o.a  #=> #<OpenStruct2: {}>
     #
-    def renew(data=nil)
+    def auto(data=nil)
       leet = lambda{ |h,k| new(&leet) }
       new(&leet)
     end
 
     #
-    # Original name for #renew method.
+    # Another name for #auto method.
     #
-    alias :auto :renew
+    # TODO: Still wondering waht the best name is for this.
+    #
+    alias :renew :auto
 
+    #
+    # Create a nested OpenStruct, such that all sub-hashes
+    # added to the table also become OpenStruct objects.
     #
     def nested(data=nil)
       o = new
-      o.nested = true
+      o.nested!(true)
       o.update!(data) if data
       o
     end
 
+    #
+    # Shorter name for `nested`.
     #
     alias :nest :nested
 
@@ -68,16 +75,16 @@ class OpenStruct2 < BasicObject
     #
     def cascade(data=nil)
       o = renew
-      o.nested = true
+      o.nested!(true)
       o.update!(data) if data
       o
     end
 
   private
+
     def const_missing(name)
       ::Object.const_get(name)
     end
-
   end
 
   #
@@ -96,18 +103,6 @@ class OpenStruct2 < BasicObject
   #
   def __class__
     OpenStruct2
-  end
-
-  #
-  # Is the OpenStruct in nested mode?
-  #
-  def is_nested?
-    @nested
-  end
-
-  #
-  def nested=(boolean)
-    @nested = !!boolean
   end
 
   #
@@ -142,6 +137,17 @@ class OpenStruct2 < BasicObject
     else
       new_ostruct_member(name)
       read!(name)
+    end
+  end
+
+  #
+  # Get/set nested flag.
+  #
+  def nested!(boolean=nil)
+    if boolean.nil?
+      @nested
+    else
+      @nested = !!boolean
     end
   end
 
