@@ -1,4 +1,4 @@
-# OpenStruct2 is better OpenStruct class.
+# OpenStruct2 is a better OpenStruct class.
 #
 # To demonstrate the weakness of the original OpenStruct, try this IRB session:
 #
@@ -15,9 +15,9 @@
 # methods: `clone`, `dup`, `freeze`, `hash`, `to_enum`, `to_h`,
 # `to_s` and `inspect`, as well as `instance_eval` and `instance_exec`.
 #
-# Also note that `empty`, `eql`, `equal` and `frozen` can be used as members
-# but the key-check shorthand of using `?`-methods cannot be used since they
-# have special definitions.
+# Also note that `empty`, `eql`, `equal`, `frozen` and `key` can be used as
+# members but the key-check shorthand of using `?`-methods cannot be used since
+# these have special definitions.
 #
 # To offset the loss of most methods, OpenStruct provides numerous
 # bang-methods which can be used to manipulate the data, e.g. `#each!`.
@@ -126,7 +126,7 @@ class OpenStruct2 < BasicObject
     case type
     when '!'
       # TODO: Probably should have an indirect interface to ensure proper
-      #       functonariluiy in all cases.
+      #       functonality in all cases.
       @table.public_send(name, *args, &blk)
     when '='
       new_ostruct_member(name)
