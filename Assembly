@@ -17,8 +17,8 @@ yard:
 
 qedoc:
   files : demo/
-  output: DEMO.rdoc
-  title : Ostruct2
+  output: DEMO.md
+  title : OStruct2
 
 email:
   service : Email
