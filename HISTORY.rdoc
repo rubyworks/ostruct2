@@ -1,8 +1,24 @@
 = RELEASE HISTORY
 
-0.1.0 | 2011-01-01
+0.2.0 | 2012-05-23
 
-Summary of release...
+This release brings the new OpenStruct to a production ready state.
+
+Changes:
+
+* Constructors cascade and auto/renew are now slightly different.
+* Added nest/nested constructor for nests OpenStructs. (Cool!)
+* Boost performace via on-demand creation of singleton methods.
+* Add missing equality methods, hash method and dup/clone methods.
+* Rename main class to OpenStruct2 to avoid conflicts with original.
+* Require `ostruct2/ostruct` to get drop-in replacement.
+
+
+0.1.0 | 2011-05-01
+
+This is the initial relase of OpenSturct2.
+
+Changes:
 
 * First release.
 

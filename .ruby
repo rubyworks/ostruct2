@@ -52,7 +52,7 @@ revision: 0
 created: '2010-04-21'
 summary: A Better OpenStruct
 title: OStruct2
-version: 0.1.0
+version: 0.2.0
 name: ostruct2
 description: ! 'OStruct2 is a reimplementation of Ruby''s standard ostruct.rb library.
 
@@ -60,4 +60,4 @@ description: ! 'OStruct2 is a reimplementation of Ruby''s standard ostruct.rb li
 
   member names and cloning.'
 organization: Rubyworks
-date: '2012-05-20'
+date: '2012-05-23'
