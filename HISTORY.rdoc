@@ -14,7 +14,7 @@ Changes:
 * Require `ostruct2/ostruct` to get drop-in replacement.
 
 
-0.1.0 | 2011-05-01
+0.1.0 | 2011-05-20
 
 This is the initial relase of OpenSturct2.
 
