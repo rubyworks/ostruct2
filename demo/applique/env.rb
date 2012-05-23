@@ -1,2 +1,2 @@
 require 'ae'
-require 'ostruct2'
+require 'ostruct2/ostruct'

@@ -1,32 +1,83 @@
-# A better OpenStruct class.
+# OpenStruct2 is better OpenStruct class.
 #
-# This OpenStruct class allows almost any member name to be used.
+# To demonstrate the weakness of the original OpenStruct, try this IRB session:
+#
+#   irb(main):001:0> o = OpenStruct.new
+#   => #<OpenStruct>
+#   irb(main):002:0> o.display = "Hello, World!"
+#   => "Hello, World!"
+#   irb(main):003:0> o.display
+#   #<OpenStruct display="Hello, World!">=> nil
+#
+# This new OpenStruct class allows *almost* any member name to be used.
 # The only exceptions are methods starting with double underscores,
-# e.g. `__id__`, and a few neccessary public methods: `hash`, `dup`,
-# `to_enum`, `to_h` and `inspect`.
+# such as `__id__` and `__send__`, and a few neccessary public
+# methods: `clone`, `dup`, `freeze`, `hash`, `to_enum`, `to_h`,
+# `to_s` and `inspect`, as well as `instance_eval` and `instance_exec`.
+#
+# Also note that `empty`, `eql`, `equal` and `frozen` can be used as members
+# but the key-check shorthand of using `?`-methods cannot be used since they
+# have special definitions.
 #
 # To offset the loss of most methods, OpenStruct provides numerous
 # bang-methods which can be used to manipulate the data, e.g. `#each!`.
+# Currently most bang-methods route directly to the underlying hash table,
+# so developers should keep that in mind when using this feature. A future
+# version may add an intermediate interface to always ensure proper "CRUD",
+# functonality but in the vast majority of cases it will make no difference,
+# so it is left for later consideration.
 #
-# This improved version of OpenStruct also has no issues with being
-# cloned or marshalled since it does not depend on singleton methods.
+# This improved version of OpenStruct also has no issues with being cloned
+# since it does not depend on singleton methods to work. But singleton methods
+# are used to help boost performance. But instead of always creating singleton
+# methods, it only creates them on the first attempt to use them.
 #
-class OpenStruct < BasicObject
+class OpenStruct2 < BasicObject
 
   class << self
     #
-    # Create cascading OpenStruct.
+    # Create autovivified OpenStruct.
     #
-    def cascade(data=nil)
-      leet = lambda{ |h,k| OpenStruct.new(&leet) }
+    # @example
+    #   o = OpenStruct2.renew
+    #   o.a  #=> #<OpenStruct2: {}>
+    #
+    def renew(data=nil)
+      leet = lambda{ |h,k| new(&leet) }
       new(&leet)
     end
 
-    # Is there a better name for #auto?
-    #alias :autorenew :cascade
+    #
+    # Original name for #renew method.
+    #
+    alias :auto :renew
 
-    # Original name for #cascade method.
-    alias :auto :cascade
+    #
+    def nested(data=nil)
+      o = new
+      o.nested = true
+      o.update!(data) if data
+      o
+    end
+
+    #
+    alias :nest :nested
+
+    #
+    # Constructor that is both autovivified and nested.
+    #
+    def cascade(data=nil)
+      o = renew
+      o.nested = true
+      o.update!(data) if data
+      o
+    end
+
+  private
+    def const_missing(name)
+      ::Object.const_get(name)
+    end
+
   end
 
   #
@@ -40,6 +91,36 @@ class OpenStruct < BasicObject
   end
 
   #
+  # Because there is no means of getting the class via a BasicObject instance,
+  # we define such a method manually.
+  #
+  def __class__
+    OpenStruct2
+  end
+
+  #
+  # Is the OpenStruct in nested mode?
+  #
+  def is_nested?
+    @nested
+  end
+
+  #
+  def nested=(boolean)
+    @nested = !!boolean
+  end
+
+  #
+  # Duplicate underlying table when OpenStruct is duplicated or cloned.
+  #
+  # @param [OpenStruct] original
+  #
+  def initialize_copy(original)
+    super
+    @table = @table.dup
+  end
+
+  #
   # Dispatch unrecognized member calls.
   #
   def method_missing(sym, *args, &blk)
@@ -48,13 +129,18 @@ class OpenStruct < BasicObject
     name = str.chomp('=').chomp('!').chomp('?')
 
     case type
-    when '='
-      store!(name, args.first)
     when '!'
+      # TODO: Probably should have an indirect interface to ensure proper
+      #       functonariluiy in all cases.
       @table.public_send(name, *args, &blk)
+    when '='
+      new_ostruct_member(name)
+      store!(name, args.first)
     when '?'
+      new_ostruct_member(name)
       key?(name)
     else
+      new_ostruct_member(name)
       read!(name)
     end
   end
@@ -84,6 +170,12 @@ class OpenStruct < BasicObject
   # The CRUD method for create and update.
   #
   def store!(key, value)
+    if @nested && Hash === value  # value.respond_to?(:to_hash)
+      value = OpenStruct2.new(value)
+    end
+
+    #new_ostruct_member(key)  # this is here only for speed bump
+
     @table[key.to_sym] = value
   end
 
@@ -91,6 +183,16 @@ class OpenStruct < BasicObject
   # The CRUD method for destroy.
   #
   def delete!(key)
+    @table.delete(key.to_sym)
+  end
+
+  #
+  # Same as `#delete!`. This method provides compatibility
+  # with the original OpenStruct class.
+  #
+  # @deprecated Use `#delete!` method instead.
+  #
+  def delete_field(key)
     @table.delete(key.to_sym)
   end
 
@@ -152,6 +254,11 @@ class OpenStruct < BasicObject
   end
 
   #
+  def map!(&block)
+    to_enum.map(&block)
+  end
+
+  #
   # CRUDified update method.
   #
   # @return [self]
@@ -181,11 +288,15 @@ class OpenStruct < BasicObject
   end
 
   #
-  # Is the OpenStruct void of entries?
+  # Inspect OpenStruct object.
   #
-  def empty?
-    @table.empty?
+  # @return [String]
+  #
+  def inspect
+    "#<#{__class__}: #{@table.inspect}>"
   end
+
+  alias :to_s :inspect
 
   #
   # Get a duplicate of the underlying table.
@@ -195,6 +306,9 @@ class OpenStruct < BasicObject
   def to_h
     @table.dup
   end
+
+  # TODO: Should OpenStruct2 support #to_hash ?
+  #alias :to_hash :to_h
 
   #
   # Create an enumerator based on `#each!`.
@@ -211,8 +325,10 @@ class OpenStruct < BasicObject
   # @return [OpenStruct] Duplicate instance.
   #
   def dup
-    ::OpenStruct.new(@table, &@table.default_proc)
+    __class__.new(@table, &@table.default_proc)
   end
+
+  alias :clone :dup
 
   #
   # Hash number.
@@ -222,13 +338,64 @@ class OpenStruct < BasicObject
   end
 
   #
-  # Inspect OpenStruct object.
+  # Freeze OpenStruct instance.
   #
-  # @return [String]
+  def freeze
+    @table.freeze
+  end
+
   #
-  def inspect
-    "#<OpenStruct: #{@table.inspect}>"
+  # Is the OpenStruct instance frozen?
+  #
+  # @return [Boolean]
+  #
+  def frozen?
+    @table.frozen?
+  end
+
+  #
+  # Is the OpenStruct void of entries?
+  #
+  def empty?
+    @table.empty?
+  end
+
+  #
+  # Two OpenStructs are equal if they are the same class and their
+  # underlying tables are equal.
+  #
+  def eql?(other)
+    return false unless(other.kind_of?(__class__))
+    return @table == other.table #to_h
+  end
+
+  #
+  # Two OpenStructs are equal if they are the same class and their
+  # underlying tables are equal.
+  #
+  # TODO: Why not equal for other hash types, e.g. via #to_h?
+  #
+  def ==(other)
+    return false unless(other.kind_of?(__class__))
+    return @table == other.table #to_h
+  end
+
+protected
+
+  def table
+    @table
+  end
+
+  def new_ostruct_member(name)
+    name = name.to_sym
+    # TODO: Check `#respond_to?` is needed? And if so how to do this in BasicObject?
+    #return name if self.respond_to?(name)
+    (class << self; self; end).class_eval do
+      define_method(name) { read!(name) }
+      define_method("#{name}?") { key?(name) }
+      define_method("#{name}=") { |value| store!(name, value) }
+    end
+    name
   end
 
 end
-
