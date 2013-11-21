@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+# TODO: Do things in ruby where possible instead of shelling out!
+
+ignore 'doc', 'log', 'pkg', 'tmp', 'site', 'web', 'work'
+
+# TODO: Eventually Fire should provide access to metadata via a utility method.
+version = File.read('var/version').strip
+
+#desc "update manifest"
+#task 'manifest' do
+#  system 'mast -u'
+#end
+
+#desc "release and tag"
+#task 'release' do
+#  exit -1 unless system('detroit release')
+#  system 'vclog-news | git tag -a -F - #{version}'
+#end
+
+file 'var' do
+  system 'index -u var'
+end
+
+file 'lib' do
+  #exit -1 unless system('detroit test')
+  exit -1 unless system('qed')
+end
+
+file 'demo' do
+  #exit -1 unless system('detroit test')
+  exit -1 unless system('qed')
+end
+

@@ -6,8 +6,8 @@ gem:
   active: true
 
 dnote:
-  service  : DNote
-  labels   : ~
+  title: Source Notes
+  labels: ~
   output:
     log/dnote.html
 
@@ -27,6 +27,9 @@ email:
   mailto  : 
     - ruby-talk@ruby-lang.org
     - rubyworks-mailinglist@googlegroups.com
+
+locat:
+  output: log/locat.html
 
 #vclog:
 #  active: false
