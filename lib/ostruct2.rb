@@ -322,7 +322,9 @@ class OpenStruct2 < BasicObject
   # @return [Enumerator]
   #
   def to_enum
-    ::Enumerator.new(self, :each!)
+    # Why has Ruby 2 deprecated this form?
+    #::Enumerator.new(self, :each!) 
+    ::Kernel.instance_method(:to_enum).bind(self).call(:each!)
   end
 
   #
