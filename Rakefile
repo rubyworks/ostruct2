@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-default :test
-
 desc 'run unit tests'
 task 'test' do
   sh 'qed'
