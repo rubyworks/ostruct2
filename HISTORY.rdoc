@@ -1,5 +1,19 @@
 = RELEASE HISTORY
 
+== 0.2.1 | 2013-11-21
+
+Primarily this release cleans up the project configuration a bit
+and adds a missing `LICENSE.txt` file. But it also adjusts the `#to_enum`
+method to avoid Ruby 2.0's deprecation of `Enumerator.new(object, method)`.
+I don't know why Matz thought it a good thing to do. It forced us to use
+`Kernel.instance_method(:enum_for).bind(...).call(...)` in its place. Fugly!
+
+Changes:
+
+* Adjust to_enum to not use Enumerator.new.
+* Add missing LICENSE file.
+
+
 == 0.2.0 | 2012-05-23
 
 This release brings the new OpenStruct to a production ready state.
