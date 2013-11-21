@@ -1,9 +1,8 @@
-#!mast .index .ruby .yardopts bin info data lib man spec test [A-Z]*.*
+#!mast .index .ruby .yardopts bin info data lib man spec test *.rdoc *.md *.txt
 .index
 lib/ostruct2/ostruct.rb
 lib/ostruct2.rb
 README.rdoc
 HISTORY.rdoc
-Config.rb
-LICENSE.txt
 DEMO.md
+LICENSE.txt
