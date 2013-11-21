@@ -9,10 +9,6 @@ authors:
 organizations: []
 requirements:
 - groups:
-  - build
-  development: true
-  name: detroit
-- groups:
   - test
   development: true
   name: qed
@@ -20,6 +16,10 @@ requirements:
   - test
   development: true
   name: ae
+- groups:
+  - build
+  development: true
+  name: rake
 conflicts: []
 alternatives: []
 resources:
